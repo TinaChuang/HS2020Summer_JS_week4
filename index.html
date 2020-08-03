@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第四週主線任務 - Vue 與 API 串接</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+</head>
+<body style="background-color: #fff4e6;">
+  <div id="app" class="container my-3 ">
+    <div class="row d-flex justify-content-center align-items-center">
+      <div class="col-12 col-sm-8 col-md-7 text-center">
+        <div class="card p-5 shadow-sm">
+          <h1 class="font-weight-bold mb-4" v-if="!!token">已登入</h1>
+          <h1 class="font-weight-bold mb-4" v-else>請先登入</h1>
+          <div v-if="!token" class=" mb-4">
+            <input type="email" name="" id="Email" placeholder="Email address" class="form-control" v-model="user.email"> <br/>
+            <input type="password" name="" id="password" placeholder="Password" class="form-control" v-model="user.password" @keyup.enter="signIn">
+          </div>          
+          <button type="button" class="btn btn-primary btn-block btn-lg" @click="signIn" v-if="!token">登入</button>
+          <button type="button" class="btn btn-outline-danger btn-block btn-lg" @click="signOut" v-else>登出</button>
+        </div>        
+      </div>
+    </div>
+    <div class="text-center my-4">
+      <!-- <button type="button" class="btn btn-primary" v-if="token" @click="getProdData">取得商品列表</button>
+      <button type="button" class="btn btn-primary disabled" v-else>取得商品列表</button> -->
+      <button type="button" class="btn btn-primary" v-if="!!token" @click="getProdData">取得商品列表</button>
+    </div>
+    <div class="row" id="prodWrap">
+      <table class="table my-4 bg-light table-hover shadow-sm" v-if="products">
+        <thead class="thead-dark">
+          <tr>
+            <th>順序</th>
+            <th>分類</th>
+            <th>產品名稱</th>
+            <th>產品照片</th>
+            <th>原價</th>
+            <th>售價</th>
+            <th>是否啟用</th>
+            <th>編輯</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in products" :key="item.id">
+            <td>{{index + 1}}</td>
+            <td>{{item.category}}</td>
+            <td>{{item.title}}</td>
+            <td><img :src="item.imageUrl" :alt="item.title" :title="item.title" style="width: 80px;"></td>
+            <td>{{item.origin_price}}</td>
+            <td>{{item.price}}</td>
+            <td>
+              <span class="badge badge-pill badge-success" v-if="item.is_enabled">啟用</span>
+              <span class="badge badge-pill badge-danger" v-else>未啟用</span>
+            </td>
+            <td>
+              <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary" @click="openModal('edit', item)">編輯</button>
+                <button type="button" class="btn btn-outline-danger" @click="openModal('delete', item)">刪除</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- loading mask -->
+    <div class="modal fade" id="loadingMask" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered d-flex justify-content-center" role="document">
+        <div class="spinner-border text-light" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+  <script src="script/all.js"></script>
+</body>
+</html>
