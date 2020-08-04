@@ -1,65 +1,49 @@
-;(function($){
-  const apiUrl = 'https://course-ec-api.hexschool.io/api/';
-  let vm = new Vue({
-    el: "#app",
-    data(){
-      return {
-        user: {
-          email: '',
-          password: ''
-        },
-        products: '',
-        token: '',
-        uuid: '',
-        btnLoading: false
-      }
-    },
-    methods: {
-      signIn(){
-        this.showLoadingMask();
-        let {email, password} = this.user;
-        if(email == '' || password == ''){
-          alert("請填寫帳號及密碼");
-          return false;
-        }          
-        const api = `${apiUrl}auth/login`;
-        axios.post(api, this.user)
-            .then(res=>{
-              // 將帳密的輸入框清空
-              this.user.email = '';
-              this.user.password = '';
-              // 判斷是否登入成功
-              if(res.data.success){
-                alert(res.data.message);
-                this.token = res.data.token;
-                this.uuid = res.data.uuid;
-                // Token 與期限寫入 cookie
-                document.cookie = `hexHWToken=${this.token}; expires=${new Date(res.data.expired * 1000)}`;
-                document.cookie = `hexHWUuid=${this.uuid}; expires=${new Date(res.data.expired * 1000)}`;
-              };
-              this.hideLoadingMask();
-            }).catch(res=>{
-              // 將帳密的輸入框清空
-              this.user.email = '';
-              this.user.password = '';
-              alert("該用戶不存在");
-              this.hideLoadingMask();
-            });          
+import login from "./Component/Login.js";
+// import modal from "./Component/Modal.js";
+import pagination from "./Component/Pagination.js";
+
+Vue.component("login", login);
+// Vue.component("modal", modal);
+Vue.component("pagination", pagination);
+
+const apiUrl = 'https://course-ec-api.hexschool.io/api/';
+
+new Vue({
+  el: "#app",
+  data(){
+    return {
+      api: {
+        uuid: 'e3cf317a-b68f-4629-9716-f0f4ec843e36',
+        path: 'https://course-ec-api.hexschool.io/api/',
       },
-      signOut(){
-        token = '';
-        uuid = '';
+      products: '',
+      pages: '',
+      isLogin: false,
+    }
+  },
+  created() {
+    let hexHWUuidCookie = document.cookie.replace(/(?:(?:^|.*;\s*)hexHWUuid\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    let hexHWTokenCookie = document.cookie.replace(/(?:(?:^|.*;\s*)hexHWToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    (!!hexHWUuidCookie)? this.isLogin = true: this.isLogin = false;
+    axios.defaults.headers.common['Authorization'] = `Bearer ${hexHWTokenCookie}`;
+  },
+    methods: {
+      isLoginHandler() {
+        this.isLogin = true;
+      },
+      signOut() {
         document.cookie = "hexHWToken=; expires=";
         document.cookie = "hexHWUuid=; expires=";
         location.reload();
       },
-      getProdData(){
+      getProdData(pageNum = 1){
         this.showLoadingMask();
         this.uuid = document.cookie.replace(/(?:(?:^|.*;\s*)hexHWUuid\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-        const getProdListAPI = `${apiUrl}${this.uuid}/ec/products`;
+        const getProdListAPI = `${apiUrl}${this.uuid}/ec/products?page=${pageNum}`;
         axios.get(getProdListAPI)
             .then(res=>{
               this.products = res.data.data;
+              this.pages = res.data.meta.pagination;
               this.hideLoadingMask();
             })
             .catch(err=>{
@@ -68,11 +52,10 @@
             })
       },
       showLoadingMask(){
-        $('#loadingMask').modal('show');
+        $(this.$refs.loadingMask).modal('show');
       },
       hideLoadingMask(){
-        $('#loadingMask').modal('hide');
+        $(this.$refs.loadingMask).modal('hide');
       }
     }
-  });
-})($);
+});
