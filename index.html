@@ -119,31 +119,3 @@
   <script src="script/all.js" type="module"></script>
 </body>
 </html>
-
-編號：xxx
-作業連結：https....
-
-製作前的拆解：
-- 登入：
-1. 取得使用者輸入的帳密輸入
-2. API 驗證身分，取回 token, uuid，存入 cookie
-- 取得商品列表，
-1. 從 cookie 取出 uuid，組合 API 網址，取回商品列表
-- 登出，清除 cookie 中的 token, uuid
-
-- 表單欄位與data綁定(v-model)
-- 定出應該會需要的用的方法(methods)：
-1. signIn：取得輸入的帳密(簡單判斷是否為空值)，送出 API 取回 token, uuid，儲存至 data 與 cookie 中。
-2. signOut：清空data儲存的 token, uuid，和 cookie 裡的 token, uuid
-3. getProdData：用前台取得所有商品列表的方式，取得商品資料。
-
-
-
-製作後重新調整的拆解：
-- 一開始沒有規劃 API 讀取時的空檔時間該如何顯示，上我在反覆測試時多往往不知道是資料還沒回來還是錯誤了。所以之後添加 showLoadingMask, hideLoadingMask 兩個方法來協助知道 API 回傳與否。
-1. showLoadingMask：顯示API讀取時的遮罩。
-2. hideLoadingMask：隱藏API讀取時的遮罩。
-
-拆解心得：
-
-
