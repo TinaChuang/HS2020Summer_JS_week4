@@ -41,7 +41,7 @@ export default {
       }
     }
   },
-  props: ['apiurl'],
+  props: ['apiUrl'],
   methods: {
     signIn() {
       let {email, password} = this.user;
@@ -50,7 +50,7 @@ export default {
         return false;
       };
       this.$parent.showLoadingMask();
-      const api = `${this.apiurl.path}auth/login`;
+      const api = `${this.apiUrl.path}auth/login`;
       axios.post(api, this.user)
           .then(res=>{
             // 將帳密的輸入框清空
@@ -62,6 +62,7 @@ export default {
               // Token 與期限寫入 cookie
               document.cookie = `hexHWToken=${res.data.token}; expires=${new Date(res.data.expired * 1000)}`;
               document.cookie = `hexHWUuid=${res.data.uuid}; expires=${new Date(res.data.expired * 1000)}`;
+              axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
               this.$emit('logged');
               this.$parent.hideLoadingMask();
             };

@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
 </head>
-<body style="background-color: #fff4e6;">
+<body style="background-color: #f1f1f1;">
   <div id="app" class="container my-3 ">
 
     <div class="text-center my-4" v-if="isLogin">
@@ -29,12 +29,21 @@
 
     <login
       v-else
-      :apiurl="api"
+      :api-url="api"
       @logged= "isLoginHandler"
     ></login>
 
     <!-- 商品列表 -->
     <div class="row" id="prodWrap">
+      <div class="col-12 text-right">
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="openModal('add')"
+        >
+          + 新增商品
+        </button>
+      </div>
       <table class="table my-4 bg-light table-hover shadow-sm" v-show="products">
         <thead class="thead-dark">
           <tr>
@@ -57,13 +66,13 @@
             <td>{{item.origin_price}}</td>
             <td>{{item.price}}</td>
             <td>
-              <span class="badge badge-pill badge-success" v-if="item.is_enabled">啟用</span>
+              <span class="badge badge-pill badge-success" v-if="item.enabled">啟用</span>
               <span class="badge badge-pill badge-danger" v-else>未啟用</span>
             </td>
             <td>
               <div class="btn-group">
-                <button type="button" class="btn btn-outline-primary" @click="openModal('edit', item)">編輯</button>
-                <button type="button" class="btn btn-outline-danger" @click="openModal('delete', item)">刪除</button>
+                <button type="button" class="btn btn-outline-primary" @click="openModal('edit', item.id)">編輯</button>
+                <button type="button" class="btn btn-outline-danger" @click="openModal('delete', item.id)">刪除</button>
               </div>
             </td>
           </tr>
@@ -76,6 +85,14 @@
       :pages-data="pages"
       @update="getProdData"
     ></pagination>
+
+    <!-- 新增/編輯 modal -->
+    <modal
+      :temp-product="tempProduct"
+      :api-url="api"
+      :current-page="pages.current_page"
+      v-show="tempProduct"
+    ></modal>
 
     <!-- loading mask -->
     <div class="modal fade" ref="loadingMask" id="loadingMask" tabindex="-1" role="dialog" aria-hidden="true">

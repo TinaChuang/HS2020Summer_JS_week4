@@ -49,9 +49,6 @@ export default{
     </nav>
   `,
   props: ['pagesData'],
-  data() {
-    return {}
-  },
   methods: {
     updatePage(pageNum) {
       this.$parent.showLoadingMask();
@@ -60,6 +57,7 @@ export default{
       } else if (pageNum > this.pagesData.total_pages){
         pageNum = this.pagesData.total_pages;
       }
+      // 向父層傳出被選定的頁碼
       this.$emit("update", pageNum);
     }
   }

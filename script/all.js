@@ -1,9 +1,9 @@
 import login from "./Component/Login.js";
-// import modal from "./Component/Modal.js";
+import modal from "./Component/Modal.js";
 import pagination from "./Component/Pagination.js";
 
 Vue.component("login", login);
-// Vue.component("modal", modal);
+Vue.component("modal", modal);
 Vue.component("pagination", pagination);
 
 const apiUrl = 'https://course-ec-api.hexschool.io/api/';
@@ -16,15 +16,20 @@ new Vue({
         uuid: 'e3cf317a-b68f-4629-9716-f0f4ec843e36',
         path: 'https://course-ec-api.hexschool.io/api/',
       },
+      tempProduct: {
+        imageUrl: []
+      },
       products: '',
       pages: '',
       isLogin: false,
     }
   },
   created() {
+    // 元件還沒被渲染出來時就先去判斷是否 cookie 有紀錄 token，若無則顯示登入的元件
     let hexHWUuidCookie = document.cookie.replace(/(?:(?:^|.*;\s*)hexHWUuid\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     let hexHWTokenCookie = document.cookie.replace(/(?:(?:^|.*;\s*)hexHWToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     (!!hexHWUuidCookie)? this.isLogin = true: this.isLogin = false;
+    // 有 token 的話設定 axios headers
     axios.defaults.headers.common['Authorization'] = `Bearer ${hexHWTokenCookie}`;
   },
     methods: {
@@ -38,8 +43,8 @@ new Vue({
       },
       getProdData(pageNum = 1){
         this.showLoadingMask();
-        this.uuid = document.cookie.replace(/(?:(?:^|.*;\s*)hexHWUuid\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-        const getProdListAPI = `${apiUrl}${this.uuid}/ec/products?page=${pageNum}`;
+        let _uuid = document.cookie.replace(/(?:(?:^|.*;\s*)hexHWUuid\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        const getProdListAPI = `${apiUrl}${_uuid}/admin/ec/products?page=${pageNum}`;
         axios.get(getProdListAPI)
             .then(res=>{
               this.products = res.data.data;
@@ -56,6 +61,38 @@ new Vue({
       },
       hideLoadingMask(){
         $(this.$refs.loadingMask).modal('hide');
+      },
+      openModal(type, prodId = '') {
+        switch(type) {
+          case "add": 
+            this.tempProduct = { imageUrl: [] };
+            $("#editProdModel").modal('show');
+            break;
+          case "edit":
+            if(prodId != ''){
+              this.getOneProd(prodId);              
+            };            
+            break;
+          case "delete":
+            break;
+        }
+      },
+      delProd(id) {
+        console.log("delProd: ", this.id);
+      },
+      getOneProd(id) {
+        this.showLoadingMask();
+        let _uuid = document.cookie.replace(/(?:(?:^|.*;\s*)hexHWUuid\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        const getOneProdAPI = `${apiUrl}${_uuid}/admin/ec/product/${id}`;
+        axios.get(getOneProdAPI)
+        .then(res => {
+          this.tempProduct = res.data.data;
+          $("#editProdModel").modal('show');
+          this.hideLoadingMask();
+        })
+        .catch(err => {
+          console.log(err);
+        })
       }
     }
 });
