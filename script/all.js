@@ -2,9 +2,19 @@ import login from "./Component/Login.js";
 import modal from "./Component/Modal.js";
 import pagination from "./Component/Pagination.js";
 
+
 Vue.component("login", login);
 Vue.component("modal", modal);
 Vue.component("pagination", pagination);
+
+// 驗證
+Vue.component('ValidationProvider', VeeValidate.ValidationProvider);
+VeeValidate.configure({
+  classes: {
+    valid: 'is-valid',
+    invalid: 'is-invalid',
+  }
+});
 
 const apiUrl = 'https://course-ec-api.hexschool.io/api/';
 

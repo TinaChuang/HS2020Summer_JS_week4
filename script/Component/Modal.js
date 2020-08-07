@@ -20,21 +20,27 @@ export default{
           <div class="row">
             <div class="col-12 col-md-12 col-lg-4">
               <div class="form-group">
-                <label for="imageUrl">輸入圖片網址</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="imageUrl"
-                  placeholder="請輸入圖片連結"
-                  v-model="tempProduct.imageUrl"
-                />
+                <label>輸入圖片網址</label>
+                <div
+                  class="mb-2"
+                  v-for="i in 5"
+                  :key="'img_'+i"
+                >
+                  <input
+                    type="text"
+                    class="form-control mb-1"
+                    :id="'img' + i"
+                    v-model="tempProduct.imageUrl[i - 1]"
+                    placeholder="請輸入圖片連結"
+                  />
+                  <img
+                    class="img-fluid"
+                    :src="tempProduct.imageUrl[i - 1]"
+                    :alt="tempProduct.title"
+                    :title="tempProduct.title"
+                  />
+                </div>
               </div>                
-              <img
-                class="img-fluid"
-                :src="tempProduct.imageUrl"
-                :alt="tempProduct.title"
-                :title="tempProduct.title"
-              />
             </div>
             <div class="col-12 col-md-12 col-lg-8">
               <div class="form-group">
@@ -120,8 +126,8 @@ export default{
                   class="form-check-input"
                   id="enabled"
                   v-model="tempProduct.enabled"
-                  :true-value="1"
-                  :false-value="0"
+                  :true-value=true
+                  :false-value=false
                 />
                 <label class="form-check-label" for="enabled">是否啟用</label>
               </div>
@@ -176,6 +182,7 @@ export default{
       // API 更新/新增商品資訊
       axios.patch(updateProdAPI, this.tempProduct)
         .then(res => {
+          console.log(res);
           this.isLoadingBtn = false;
           // 呼叫父層重新抓取商品列表，並帶入目前所在的頁數，正要就不用重新回到第一頁
           this.$parent.getProdData(this.currentPage);

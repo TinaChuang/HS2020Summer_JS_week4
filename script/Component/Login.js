@@ -5,22 +5,35 @@ export default {
         <div class="card p-5 shadow-sm">
           <h2 class="font-weight-bold mb-4">請先登入</h2>
           <div class="mb-4">
-            <input
-              type="email"
-              id="Email"
-              placeholder="Email address"
-              class="form-control"
-              v-model="user.email"
-            />
+            <validation-provider
+              rules="required|email"
+              v-slot="{ errors }"
+            >
+              <input
+                type="email"
+                id="Email"
+                placeholder="Email address"
+                class="form-control"
+                v-model="user.email"
+              />
+              <span class="text-danger">{{ errors[0] }}</span>
+            </validation-provider>
+
             <br/>
-            <input
-              type="password"
-              id="password"
-              placeholder="Password"
-              class="form-control"
-              v-model="user.password"
-              @keyup.enter="signIn"
-            />
+            <validation-provider
+              rules="required"
+              v-slot="{ errors }"
+            >
+              <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                class="form-control"
+                v-model="user.password"
+                @keyup.enter="signIn"
+              />
+              <span class="text-danger">{{ errors[0] }}</span>
+            </validation-provider>            
           </div>          
           <button
             type="button"

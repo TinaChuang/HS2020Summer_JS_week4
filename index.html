@@ -9,22 +9,32 @@
 </head>
 <body style="background-color: #f1f1f1;">
   <div id="app" class="container my-3 ">
-
-    <div class="text-center my-4" v-if="isLogin">
-      <button
-        type="button"
-        class="btn btn-primary"
-        @click="getProdData()"
-      >
-        取得商品列表
-      </button>
-      <button
-        type="button"
-        class="btn btn-outline-danger"
-        @click="signOut"
-      >
-        登出
-      </button>
+    <div class="row" v-if="isLogin">
+      <div class="col-12 text-center my-4">
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="getProdData()"
+        >
+          取得商品列表
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          @click="signOut"
+        >
+          登出
+        </button>
+      </div>
+      <div class="col-12 text-right my-3">
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="openModal('add')"
+        >
+          + 新增商品
+        </button>
+      </div>
     </div>
 
     <login
@@ -35,15 +45,7 @@
 
     <!-- 商品列表 -->
     <div class="row" id="prodWrap">
-      <div class="col-12 text-right">
-        <button
-          type="button"
-          class="btn btn-primary"
-          @click="openModal('add')"
-        >
-          + 新增商品
-        </button>
-      </div>
+      
       <table class="table my-4 bg-light table-hover shadow-sm" v-show="products">
         <thead class="thead-dark">
           <tr>
@@ -116,6 +118,7 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script src="script/all.js" type="module"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/3.3.0/vee-validate.full.min.js"></script>
+<script src="script/all.js" type="module"></script>
 </body>
 </html>
