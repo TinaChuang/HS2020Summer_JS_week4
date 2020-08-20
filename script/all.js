@@ -2,7 +2,6 @@ import login from "./Component/Login.js";
 import modal from "./Component/Modal.js";
 import pagination from "./Component/Pagination.js";
 
-
 Vue.component("login", login);
 Vue.component("modal", modal);
 Vue.component("pagination", pagination);

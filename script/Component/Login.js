@@ -16,7 +16,7 @@ export default {
                 class="form-control"
                 v-model="user.email"
               />
-              <span class="text-danger">{{ errors[0] }}</span>
+              <p class="text-danger text-left mb-0">{{ errors[0] }}</p>
             </validation-provider>
 
             <br/>
@@ -32,16 +32,17 @@ export default {
                 v-model="user.password"
                 @keyup.enter="signIn"
               />
-              <span class="text-danger">{{ errors[0] }}</span>
+              <p class="text-danger text-left mb-0">{{ errors[0] }}</p>
             </validation-provider>            
           </div>          
           <button
             type="button"
-            class="btn btn-primary btn-block btn-lg"
+            class="btn btn-primary btn-block btn-lg mb-3"
             @click="signIn"
           >
             登入
           </button>
+          <a href="./registered.html">註冊</a>
         </div>        
       </div>
     </div>

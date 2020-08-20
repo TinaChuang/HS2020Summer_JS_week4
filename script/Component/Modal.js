@@ -174,13 +174,19 @@ export default{
     },
     updateProd() {
       this.isLoadingBtn = true;
-      // 若是是新增商品，利用時間戳記來做為商品ID
-      if(!this.tempProduct.id){
-        this.tempProduct.id = Date.now();
-      }      
-      const updateProdAPI = `${this.apiUrl.path}${this.apiUrl.uuid}/admin/ec/product/${this.tempProduct.id}`;
-      // API 更新/新增商品資訊
-      axios.patch(updateProdAPI, this.tempProduct)
+      let updateProdAPI = `${this.apiUrl.path}${this.apiUrl.uuid}/admin/ec/product/}`;
+      // 新增商品
+      let httpMethod = "post";
+
+      // 若非新增商品，則變更 "post" 為 "patch"
+      if (!!this.tempProduct.id){
+        httpMethod = "patch";
+        updateProdAPI += `/${this.tempProduct.id}`;
+      };
+      //預設帶入 token
+      let hexHWTokenCookie = document.cookie.replace(/(?:(?:^|.*;\s*)hexHWToken\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+      axios.defaults.headers.common.Authorization = `Bearer ${hexHWTokenCookie}`;
+      axios[httpMethod](updateProdAPI, this.tempProduct)
         .then(res => {
           console.log(res);
           this.isLoadingBtn = false;

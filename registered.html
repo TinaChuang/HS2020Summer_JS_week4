@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第五週主線任務 - 表單驗證</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-8 card py-5 px-3 shadow-sm">
+        <h1 class="text-center">註冊會員</h1>
+        <div class="container" id="registered-form">
+          <div class="row">
+            <div class="col-12">
+              <form action="/">
+                <validation-provider rules="required" v-slot="{ errors, classes, passed}">
+                  <div class="form-group">
+                    <label for="">姓名</label>
+                    <input 
+                      type="text" 
+                      name="userName" 
+                      class="form-control" 
+                      v-model="userName"  
+                      :class="classes" 
+                      placeholder="王曉明"
+                    >
+                    <span v-if="errors[0]" class="text-danger">{{ errors[0] }}</span>
+                  </div>
+                </validation-provider>
+                <validation-provider rules="required|email" v-slot="{ errors, classes, passed }">
+                  <div class="form-group">
+                    <label for="">Email</label>
+                    <input
+                      type="email" 
+                      name="email" 
+                      class="form-control" 
+                      :class="classes"
+                      v-model="email" 
+                      placeholder="aaa@bbb.com"
+                    >
+                    <span v-if="errors[0]" class="text-danger">{{ errors[0] }}</span>
+                  </div>
+                </validation-provider>
+                <validation-provider :rules="{required: true, min: { length: 8 }, max: { length: 10 } }" v-slot="{ errors, classes, passed }">
+                  <div class="form-group">
+                    <label for="">連絡電話</label>
+                    <input 
+                      type="tel" 
+                      name="phone" 
+                      class="form-control" 
+                      :class="classes"
+                      v-model="tel" 
+                      placeholder="0912345678"
+                    >
+                    <span v-if="errors[0]" class="text-danger">{{ errors[0] }}</span>
+                  </div>
+                </validation-provider>
+                <validation-provider rules="required" v-slot="{ errors, classes, passed }">
+                  <div class="form-group">
+                    <label for="">地址</label>
+                    <input
+                      type="text" 
+                      class="form-control" 
+                      :class="classes"
+                      name="address" 
+                      v-model="address"
+                    >
+                    <span v-if="errors[0]" class="text-danger">{{ errors[0] }}</span>
+                  </div>
+                </validation-provider>
+                <div class="form-group">
+                  <label for="">預設付款方式</label>
+                  <select class="form-control" v-model="payment">
+                    <option v-for="(option, index) in paymentOptions" :key="option.value">
+                      {{ option.text }}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="d-block" for="">備註</label>
+                  <textarea class="form-control" v-model="message" cols="30" ></textarea>
+                </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary">註冊</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+  integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+  integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vee-validate/3.3.0/vee-validate.full.min.js"></script>
+<script src="script/registered.js" type="module"></script>
+</body>
+</html>
